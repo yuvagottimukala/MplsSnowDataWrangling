@@ -1,0 +1,132 @@
+---
+about:
+  template: jolla
+  id: about-block
+---
+::: {#about-block}
+:::
+
+# Miniproject 2!
+
+The point of this miniproject was to be able to make sensible graphics from 2 
+very rich datasets. The data was collected from Open Minneapolis, from which we used, 
+Snow Emergency Tags – 2022/2023 Season #4 Northrop (1/4/23 thru 1/6/23) and Snow 
+Emergency Tows – 2022/2023 Season #4 Northrop (1/4/23 thru 1/6/23).
+
+I have made three graphics to visualize tags and tows, each of which are described 
+in detail below. This was a very intresting project and was oddly engaging. I was under 
+the assumption that I would just mutate the data and slap it in a ggplot with a plain theme
+and submit like I have been doing. However, turns out there is so much to R and Quarto files
+than I have probably time for this semester but I feel like I got my toes in the water with 
+this one. From learning about Yml themes from quarto, being able to make a Yml file and 
+using some html aspects to be able to make a somewhat visually pleasing website. 
+
+My main question im hoping to answer with this project is what ward/neighborhood has the 
+most issues with parking in the winter?
+
+
+# Plot 1
+
+This plot is showing the 3 violation types and the count for the number of tags issued for 
+each type. One observation is that Even Address street parking was the biggest violation. 
+
+
+```{r echo=FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("images/unnamed-chunk-1-1 copy.png")
+```
+
+
+# Plot 2
+
+This is a plot that shows tow counts per neighborhood and the biggest observation here
+is that Whittier has the most tows by far.
+
+```{r echo=FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("images/unnamed-chunk-2-1 copy.png")
+```
+
+
+
+
+# Plot 3
+
+This is a plot that shows total violation counts per neighborhood(tows and tags) and the 
+biggest observation here is that Whittier still comes out on top. after a summer of painting
+in and around Whittier I can see why this would be the case as parking there sucks. Too many
+cars and not enough street spots. 
+
+```{r echo=FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("images/unnamed-chunk-3-1 copy.png")
+```
+
+
+
+# In conclusion, 
+
+The plots above show that Whittier is the most prominent neighborhood when it comes to 
+parking in the winter. I think there are many reasons this could be, such as: Population density, 
+cars to parking spots ratio, avalable street parking spots and so on. More research will have to be 
+done to accurately say what is the reasoning behind the high violations and tows. For now though, we 
+have answered our question and can proceed with furthur research.
+
+# vvv All code below for 3 plots vvvv
+
+
+```{r message = FALSE, warning = FALSE,results="hide", fig.show='hide'}
+
+##load libraries
+library(tidyverse)
+library(postcards)
+
+tows <-read_csv("Snow_Emergency_Northrop_Tows_2023.csv")
+tags <-read_csv("Snow_Emergency_Northrop_Tags_2023.csv")
+
+##### DATA FRAME PLOT ONE #####
+my_tags <- tags |>
+  group_by(Violation)|>
+  summarise(z = n())
+
+##### DATA FRAME PLOT TWO #####
+my_tows <- tows |>
+  group_by(Neighborho)|>
+  summarise(tot = n())
+
+##### PLOT ONE #####
+ggplot(data=my_tags, aes(x=Violation, y=z,fill = z)) +
+  scale_fill_gradient(low = "lightblue", high = "coral")+
+  geom_bar(stat="identity")+theme(axis.text.x = element_text(angle = 45, vjust=0.5)) + 
+theme(text = element_text(size = 9),element_line(size =1))+
+  labs(
+  title = "3 Violation Types And Their Accumulative Conts"
+  )+
+xlab("Violation Types") + ylab("Total Violations")
+
+##### PLOT TWO #####
+ggplot(data=my_tows, aes(x=Neighborho, y=tot,fill = tot)) +
+  scale_fill_gradient(low = "lightblue", high = "coral")+
+  geom_bar(stat="identity")+theme(axis.text.x = element_text(angle = 45, vjust=0.5)) +
+theme(text = element_text(size = 9),element_line(size =1))+
+  labs(
+  title = "Tow Counts Per Neighborhood"
+  )+
+xlab("Neighborhoods") + ylab("Total Tows ")
+
+##### DATA FRAME PLOT THREE #####
+joinTowTags <- tags|>
+  left_join(tows)|>
+  group_by(Neighborho)|>
+  summarise(total = n())
+
+
+##### PLOT THREE #####
+ggplot(data=joinTowTags, aes(x=Neighborho, y=total,fill = total)) +
+  scale_fill_gradient(low = "lightblue", high = "coral")+
+  geom_bar(stat="identity")+theme(axis.text.x = element_text(angle = 45, vjust=0.5)) +
+theme(text = element_text(size = 9),element_line(size =1))+
+  labs(
+  title = "Total Tow and Tag Counts Per Neighborhood"
+  )+
+xlab("Neighborhoods") + ylab("Total Count ")
+
+```
+

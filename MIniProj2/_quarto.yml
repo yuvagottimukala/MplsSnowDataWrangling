@@ -1,0 +1,57 @@
+
+website:
+  title: "Miniproject-2"                              
+  image: spookyHeader.jpg
+  
+  favicon: spookyHeader.png
+  
+  navbar:
+    pinned: true
+    logo: spookyHeader.png
+    
+    
+    left:
+      - text: "Tags Data"
+        href: https://docs.google.com/spreadsheets/d/1n2rRjpABjaCXTRjobURnWymiZQf-UK53LhgrRgUxgCU/edit?usp=sharing
+      - text: "Tows Data"
+        href: https://docs.google.com/spreadsheets/d/1nTtF4l7VG-e4ZmmEFe813FnMO1P6YxcQ4LtA9q0x144/edit?usp=sharing
+    
+    
+    right:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/yuvagottimukala/
+
+  search: 
+    location: navbar
+    type: textbox
+  page-footer: 
+    
+    center: |
+      <span class="faux-block"> Give me an A pls!</a></span>
+
+
+project:
+  type: website
+  output-dir: docs
+
+  preview: 
+    port: 22222
+    browser: true
+    watch-inputs: true
+    navigate: true
+
+execute:
+  freeze: true
+
+format:
+  html:
+    fontsize: 1.1em
+    theme: 
+      - minty
+      - html/styles.scss
+    toc: false
+    code-link: true
+    anchor-sections: true
+    fig-cap-location: margin
+    reference-location: margin
+    footnotes-hover: true
